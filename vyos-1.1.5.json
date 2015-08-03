@@ -1,0 +1,105 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "boot_wait": "5s",
+      "disk_size": 4096,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Debian_64",
+      "boot_command": [
+        "<enter><wait10><wait10>",
+        "vyos<enter><wait>",
+        "vyos<enter><wait>",
+        "install system<enter><wait>",
+        "<enter><wait>",
+        "<enter><wait>",
+        "<enter><wait>",
+        "Yes<enter><wait>",
+        "<enter><wait10><wait10><wait10><wait10><wait10>",
+        "<enter><wait>",
+        "vagrant<enter><wait>",
+        "vagrant<enter><wait>",
+        "<enter><wait5>",
+        "reboot<enter><wait>",
+        "Yes<enter><wait10><wait10><wait10>",
+        "vyos<enter><wait>",
+        "vagrant<enter><wait>",
+        "configure<enter><wait>",
+        "set interfaces ethernet eth0 address dhcp<enter><wait>",
+        "set system login user vagrant authentication plaintext-password vagrant<enter><wait>",
+        "set system login user vagrant level admin<enter><wait>",
+        "set service ssh<enter><wait>",
+        "commit<enter><wait>",
+        "save<enter><wait>",
+        "exit<enter><wait>",
+        "exit<enter><wait5>",
+        "vagrant<enter><wait>",
+        "vagrant<enter><wait>",
+        "configure<enter><wait>",
+        "delete system login user vyos<enter><wait>",
+        "commit<enter><wait>",
+        "save<enter><wait>",
+        "exit<enter><wait>"
+      ],
+      "iso_checksum": "2acf7435d5976d16bbdb86ec3910964b6bcd56be",
+      "iso_checksum_type": "sha1",
+      "iso_url": "{{user `mirror`}}/iso/release/1.1.5/vyos-1.1.5-amd64.iso",
+      "shutdown_command": "sudo poweroff",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "60m",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "packer-vyos-1.1.5",
+      "output_directory": "packer-vyos-1.1.5",
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "only": ["virtualbox-iso"],
+      "environment_vars": [
+        "CHEF_VERSION={{user `chef_version`}}",
+        "PUPPET_VERSION={{user `puppet_version`}}"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/vyos/repo.sh",
+        "scripts/vyos/init.sh",
+        "scripts/vyos/virtualbox.sh",
+        "scripts/vyos/vagrant.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/chef.sh",
+        "scripts/vyos/puppet.sh",
+        "scripts/vyos/cleanup.sh",
+        "scripts/vyos/minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": ["virtualbox-iso"],
+      "output": "./builds/{{.Provider}}/vyos-1.1.5_chef-{{user `chef_version`}}_puppet-{{user `puppet_version`}}.box"
+    }
+  ],
+  "variables": {
+    "chef_version": "provisionerless",
+    "puppet_version": "provisionerless",
+    "mirror": "http://mirror.vyos.net"
+  }
+}
