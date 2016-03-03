@@ -1,0 +1,26 @@
+#cloud-config
+coreos:
+    units:
+      - name: coreos-cloudinit-vagrant-mkdir.service
+        command: start
+        runtime: yes
+        content: |
+          [Service]
+          Type=oneshot
+          ExecStart=/bin/mkdir -p /var/lib/coreos-vagrant
+      - name: coreos-cloudinit-vagrant-user.path
+        command: start
+        runtime: yes
+        content: |
+          [Path]
+          PathExists=/var/lib/coreos-vagrant/vagrantfile-user-data
+          Unit=user-cloudinit@var-lib-coreos\x2dvagrant-vagrantfile\x2duser\x2ddata.service
+    oem:
+      id: vagrant
+      name: Vagrant
+      version-id: 0.1
+      home-url: http://www.vagrantup.com/
+      bug-report-url: https://github.com/coreos/coreos-overlay
+
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsSTJACPizvqwgifT4aZg/wgmlW4qG05GfGNAQlrv63LaX7j4QNVFbVEF6tIK2iQUnq/if4q2zvS12Ev/72brENcbQLfAkO0vvA2erGcVTPfKbnZDeoQdfD/FgtCZYlFkU2PMoF7DImFxFz4ru6drKkUefARfI5z2RQlPs61b/xlWXCV506+u2x8/A6/W+JqH/FqLDfMyEpA+H2fyYuE5mcwwxVQ3fjYkukCGQ2nbP8FSc2mB2PxzYDL0Egr3oP1YnPem1ErEwD8/4VB2JyyC+QmDhQAjCmG0evApZwLHulh2nQA/k93yj0M+Tk4zc3D2iWEy6uHgA79mGoMQ2S1Yt vagrant
