@@ -71,6 +71,6 @@
   "variables": {
     "chef_version": "provisionerless",
     "puppet_version": "provisionerless",
-    "mirror": "http://mirrors.kernel.org/centos"
+    "mirror": "http://archive.kernel.org/centos-vault"
   }
 }
