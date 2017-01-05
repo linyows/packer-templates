@@ -7,13 +7,13 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "RedHat_64",
       "hard_drive_interface": "sata",
-      "http_directory": "http/centos-6.6/",
+      "http_directory": "http/centos-6.7/",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
-      "iso_checksum": "a63241b0f767afa1f9f7e59e6f0f00d6b8d19ed85936a7934222c03a92e61bf3",
+      "iso_checksum": "c0c1a05d3d74fb093c6232003da4b22b0680f59d3b2fa2cb7da736bc40b3f2c5",
       "iso_checksum_type": "sha256",
-      "iso_url": "{{user `mirror`}}/6.6/isos/x86_64/CentOS-6.6-x86_64-bin-DVD1.iso",
+      "iso_url": "{{user `mirror`}}/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -34,8 +34,8 @@
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "packer-centos-6.6",
-      "output_directory": "packer-centos-6.6"
+      "vm_name": "packer-centos-6.7",
+      "output_directory": "packer-centos-6.7"
     }
   ],
   "provisioners": [
@@ -65,12 +65,12 @@
     {
       "type": "vagrant",
       "only": ["virtualbox-iso"],
-      "output": "./builds/{{.Provider}}/centos-6.6_chef-{{user `chef_version`}}_puppet-{{user `puppet_version`}}.box"
+      "output": "./builds/{{.Provider}}/centos-6.7_chef-{{user `chef_version`}}_puppet-{{user `puppet_version`}}.box"
     }
   ],
   "variables": {
     "chef_version": "provisionerless",
     "puppet_version": "provisionerless",
-    "mirror": "http://archive.kernel.org/centos-vault"
+    "mirror": "http://mirrors.kernel.org/centos"
   }
 }
