@@ -7,6 +7,12 @@ rm -f /tmp/chef*rpm
 
 # clean up redhat interface persistence
 rm -f /etc/udev/rules.d/70-persistent-net.rules
+mkdir -p /etc/udev/rules.d/70-persistent-net.rules;
+rm -f /lib/udev/rules.d/75-persistent-net-generator.rules;
+rm -rf /dev/.udev/;
+
+# init dns
+echo "nameserver 8.8.8.8\nnameserver 8.8.4.4" > /etc/resolv.conf
 
 # remove uploaded_files from packer
 rm -rf /tmp/uploaded_files
